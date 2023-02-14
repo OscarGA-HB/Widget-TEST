@@ -1,0 +1,43 @@
+miro.onReady(() => {
+  // Set the URL of your Sketchfab model
+  const sketchfabUrl = "https://sketchfab.com/3d-models/c-lame-kb-a166d69dfa5c4ed1beaf365725bc088a";
+
+  // Set the dimensions of your frame
+  const frameWidth = 640;
+  const frameHeight = 480;
+
+  // Create a new frame on the board
+  miro.board.widgets.create({
+    type: "frame",
+    title: "Sketchfab Model",
+    width: frameWidth,
+    height: frameHeight,
+    x: 100,
+    y: 100
+  })
+  .then((frame) => {
+    // Create an iframe widget inside the frame
+    miro.board.widgets.create({
+      type: "iframe",
+      url: sketchfabUrl,
+      width: frameWidth,
+      height: frameHeight,
+      x: frame.x,
+      y: frame.y
+    })
+    .then((iframe) => {
+      // Send a message to the iframe to start playing the model
+      const message = {
+        type: "play"
+      };
+      miro.board.widgets.update({
+        id: iframe.id,
+        metadata: {
+          [miro.getClientId()]: {
+            message: message
+          }
+        }
+      });
+    });
+  });
+});
